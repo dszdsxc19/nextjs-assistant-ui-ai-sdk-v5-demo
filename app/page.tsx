@@ -12,6 +12,7 @@ import { z } from "zod";
 import { useState } from "react";
 import { MenuIcon, XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { lastAssistantMessageIsCompleteWithToolCalls } from "ai";
 
 const calculatorTool = tool({
   description: "Calculator",
@@ -54,6 +55,7 @@ export default function Home() {
     transport: new AssistantChatTransport({
       api: "/api/chat",
     }),
+    sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
   });
 
   return (
@@ -63,7 +65,11 @@ export default function Home() {
         <aside
           className={`
             fixed lg:relative z-20 transition-all duration-300 ease-in-out
-            ${isSidebarOpen ? "w-64 translate-x-0" : "w-64 -translate-x-full lg:translate-x-0 lg:w-16"}
+            ${
+              isSidebarOpen
+                ? "w-64 translate-x-0"
+                : "w-64 -translate-x-full lg:translate-x-0 lg:w-16"
+            }
             h-full border-r bg-card shadow-sm overflow-hidden
           `}
         >
@@ -89,7 +95,11 @@ export default function Home() {
           </div>
 
           {/* Thread List 容器 */}
-          <div className={`h-[calc(100%-3.5rem)] overflow-y-auto ${isSidebarOpen ? "p-2" : "p-1"}`}>
+          <div
+            className={`h-[calc(100%-3.5rem)] overflow-y-auto ${
+              isSidebarOpen ? "p-2" : "p-1"
+            }`}
+          >
             <ThreadList />
           </div>
         </aside>
